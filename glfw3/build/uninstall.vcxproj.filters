@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="D:\dev\LearnOpenGL\build\CMakeFiles\4c02ffc18f6e6d29ac341da8a3b998d9\uninstall.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="D:\dev\LearnOpenGL\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="D:\dev\LearnOpenGL\build\CMakeFiles\uninstall" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{5F0639E6-90E0-3EB5-81FE-92646B9F94B0}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
