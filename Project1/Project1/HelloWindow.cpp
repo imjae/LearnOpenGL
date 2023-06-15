@@ -36,18 +36,23 @@ int main()
 		return -1;
 	}
 
-	glViewport(0, 0, 800, 600);
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
+	// 렌더링 루프
 	while (!glfwWindowShouldClose(window))
 	{
+		// 입력
 		processInput(window);
 
-		glfwSwapBuffers(window);
+		// 렌더링 명령
+		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT);
+
+		// 이벤트 확인하고 버퍼 교체
 		glfwPollEvents();
+		glfwSwapBuffers(window);
 	}
 
 	glfwTerminate();
-
 	return 0;
 }
