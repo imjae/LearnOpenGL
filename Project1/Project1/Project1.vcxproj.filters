@@ -15,10 +15,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="C:\Users\jakei\Downloads\glad\src\glad.c">
+    <ClCompile Include="HelloWindow.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="HelloWindow.cpp">
+    <ClCompile Include="C:\Users\jakei\Downloads\glad (1)\src\glad.c">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

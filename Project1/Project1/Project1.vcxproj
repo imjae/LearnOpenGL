@@ -142,7 +142,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="C:\Users\jakei\Downloads\glad\src\glad.c" />
+    <ClCompile Include="C:\Users\jakei\Downloads\glad (1)\src\glad.c" />
     <ClCompile Include="HelloWindow.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
