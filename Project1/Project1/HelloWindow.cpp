@@ -2,6 +2,13 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 
+const char* vertexShaderSource = "#version 330 core\n"
+								"layout (location = 0) in vec3 aPos;\n"
+								"void main()\n"
+								"{\n"
+								"   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+								"}\0";
+
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
 	glViewport(0, 0, width, height);
@@ -45,6 +52,25 @@ int main()
 
 	// 윈도우 사이즈가 변결될 때, 호출되는 콜백 함수를 지정
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+
+
+	float vertices[] = {
+		-.5f, -.5f, .0f,
+		.5f, -.5f, .0f,
+		.0f, .5f, .0f
+	};
+
+	unsigned int VBO;
+	glGenBuffers(1, &VBO);
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+	unsigned int vertexShader;
+	vertexShader = glCreateShader(GL_VERTEX_SHADER);
+	glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
+	glCompileShader(vertexShader);
+
 
 	// 렌더링 루프
 	while (!glfwWindowShouldClose(window))
