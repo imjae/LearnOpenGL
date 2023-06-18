@@ -117,11 +117,9 @@ int main()
 
 	glBindVertexArray(VAO);
 
-	// 0. 정점 배열을 OpenGL에서 사용하기 위해 버퍼에 복사
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-	// 1. 버텍스 속성 포인터 설정
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
@@ -138,7 +136,6 @@ int main()
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		// 오브젝트를 그리고 싶을 때, 생성한 쉐이더 프로그램을 사용
 		glUseProgram(shaderProgram);
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
