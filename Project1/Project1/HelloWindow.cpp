@@ -106,19 +106,29 @@ int main()
 	glDeleteShader(fragmentShader);
 
 	float vertices[] = {
-		-.5f, -.5f, .0f,	// left
-		.5f, -.5f, .0f,		// right
-		.0f, .5f, .0f		// top
+		0.5f,  0.5f, 0.0f,  // 우측 상단
+		0.5f, -0.5f, 0.0f,  // 우측 하단
+		-0.5f, -0.5f, 0.0f,  // 좌측 하단
+		-0.5f,  0.5f, 0.0f   // 좌측 상단
 	};
 
-	unsigned int VBO, VAO;
+	unsigned int indices[] = {
+		0, 1, 3,
+		1, 2, 3
+	};
+
+	unsigned int VBO, VAO, EBO;
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
+	glGenBuffers(1, &EBO);
 
 	glBindVertexArray(VAO);
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
@@ -138,7 +148,7 @@ int main()
 
 		glUseProgram(shaderProgram);
 		glBindVertexArray(VAO);
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 		// 이벤트 확인하고 버퍼 교체
 		glfwPollEvents();
@@ -146,7 +156,7 @@ int main()
 	}
 
 	glDeleteVertexArrays(1, &VAO);
-	glDeleteBuffers(1, &VBO);
+	glDeleteBuffers(1, &EBO);
 	glDeleteProgram(shaderProgram);
 
 	// 윈도우, 콘텍스트 클리어
