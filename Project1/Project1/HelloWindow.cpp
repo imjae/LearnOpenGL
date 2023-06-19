@@ -62,12 +62,13 @@ int main()
 	// 윈도우 사이즈가 변결될 때, 호출되는 콜백 함수를 지정
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
-
+	// 버텍스 쉐이더 생성, 할당
 	unsigned int vertexShader;
 	vertexShader = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
 	glCompileShader(vertexShader);
 
+	// 버텍스 쉐이더 에러 체크
 	int success;
 	char infoLog[512];
 	glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
@@ -77,11 +78,13 @@ int main()
 		std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
 	}
 
+	// 프래그먼트 쉐이더 생성, 할당
 	unsigned int fragmentShader;
 	fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 	glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
 	glCompileShader(fragmentShader);
 
+	// 프래그먼트 에러 체크
 	glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
 	if (!success)
 	{
@@ -89,12 +92,14 @@ int main()
 		std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
 	}
 
+	// 쉐이더 프로그램 생성, 버텍스, 프래그먼트 쉐이더 링크
 	unsigned int shaderProgram;
 	shaderProgram = glCreateProgram();
 	glAttachShader(shaderProgram, vertexShader);
 	glAttachShader(shaderProgram, fragmentShader);
 	glLinkProgram(shaderProgram);
 
+	// 쉐이더 프로그램 에러 체크
 	glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
 	if (!success)
 	{
@@ -102,9 +107,11 @@ int main()
 		std::cout << "ERROR::SHADER::PROGRAM LINK::COMPILATION_FAILED\n" << infoLog << std::endl;
 	}
 
+	// 링크된 버텍스, 프래그먼트 쉐이더 삭제
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);
 
+	// 사각형에 맞는 버텍스 위치 설정
 	float vertices[] = {
 		0.5f,  0.5f, 0.0f,  // 우측 상단
 		0.5f, -0.5f, 0.0f,  // 우측 하단
@@ -112,24 +119,33 @@ int main()
 		-0.5f,  0.5f, 0.0f   // 좌측 상단
 	};
 
+	// 위 버텍스 좌표의 인덱스로 삼각형을 구성하도록 데이터 셋팅
 	unsigned int indices[] = {
 		0, 1, 3,
 		1, 2, 3
 	};
 
+	// VAO, VBO, EBO 순서대로 버퍼 생성
 	unsigned int VBO, VAO, EBO;
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
 	glGenBuffers(1, &EBO);
 
+	// Vertext Array Object 바인딩
 	glBindVertexArray(VAO);
 
+	// Vertex Buffer Object 바인딩
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	// 이전에 바인딩된 버퍼(VBO)에 vertices 사이즈와 vertices 데이터 설정
+	// GL_STATIC_DRAW는 유니티 오브젝트의 static 옵션 같음
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
+	// Element Buffer Object 바인딩
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	// 이전에 바인딩된 버퍼(EBO)에 indices 사이즈와 인덱스 데이터 설정
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
+	// 버텍스 쉐이더에서 설정된 location값
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
