@@ -145,7 +145,7 @@ int main()
 	// 이전에 바인딩된 버퍼(EBO)에 indices 사이즈와 인덱스 데이터 설정
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-	// 버텍스 쉐이더에서 설정된 location값
+	// 버텍스 쉐이더에서 설정된 입력 데이터의 location값 (여기서는 0)에 데이터를 어떤식으로 사용할 지 설정
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
