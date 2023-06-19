@@ -105,8 +105,35 @@ int main()
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);
 
+	float vertices[] = {
+		// first triangle
+		-0.9f, -0.5f, 0.0f,  // left 
+		-0.0f, -0.5f, 0.0f,  // right
+		-0.45f, 0.5f, 0.0f,  // top 
+		// second triangle
+		 0.0f, -0.5f, 0.0f,  // left
+		 0.9f, -0.5f, 0.0f,  // right
+		 0.45f, 0.5f, 0.0f,  // top 
+		 // third triangle
+		 -0.5f, 0.0f, 0.0f,  // left
+		 0.5f, 0.0f, 0.0f,	 // right
+		 0.0f, 1.0f, 0.0f  // top
+	};
 
+	unsigned int VAO, VBO;
+	glGenVertexArrays(1, &VAO);
+	glGenBuffers(1, &VBO);
 
+	glBindVertexArray(VAO);
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
 
 	// 렌더링 루프
 	while (!glfwWindowShouldClose(window))
@@ -120,7 +147,7 @@ int main()
 
 		glUseProgram(shaderProgram);
 		glBindVertexArray(VAO);
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		glDrawArrays(GL_TRIANGLES, 0, 9);
 
 		// 이벤트 확인하고 버퍼 교체
 		glfwPollEvents();
@@ -128,7 +155,7 @@ int main()
 	}
 
 	glDeleteVertexArrays(1, &VAO);
-	glDeleteBuffers(1, &EBO);
+	glDeleteBuffers(1, &VBO);
 	glDeleteProgram(shaderProgram);
 
 	// 윈도우, 콘텍스트 클리어
