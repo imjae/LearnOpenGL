@@ -31,10 +31,7 @@ void processInput(GLFWwindow* window)
 
 int main()
 {
-	// GLFW 초기화
 	glfwInit();
-	// GLFW에게 OpenGL Context 버전 3.3을 사용하겠다는 것을 알리고, 
-	// OpenGL Profile을 core로 사용하겠다고 설정
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -105,35 +102,37 @@ int main()
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);
 
-	float vertices[] = {
-		// first triangle
+	float firstTriangle[] = {
 		-0.9f, -0.5f, 0.0f,  // left 
 		-0.0f, -0.5f, 0.0f,  // right
 		-0.45f, 0.5f, 0.0f,  // top 
-		// second triangle
-		 0.0f, -0.5f, 0.0f,  // left
-		 0.9f, -0.5f, 0.0f,  // right
-		 0.45f, 0.5f, 0.0f,  // top 
-		 // third triangle
-		 -0.5f, 0.0f, 0.0f,  // left
-		 0.5f, 0.0f, 0.0f,	 // right
-		 0.0f, 1.0f, 0.0f  // top
+	};
+	float secondTriangle[] = {
+		0.0f, -0.5f, 0.0f,  // left
+		0.9f, -0.5f, 0.0f,  // right
+		0.45f, 0.5f, 0.0f   // top 
 	};
 
-	unsigned int VAO, VBO;
-	glGenVertexArrays(1, &VAO);
-	glGenBuffers(1, &VBO);
+	unsigned int VAOs[2], VBOs[2];
+	glGenVertexArrays(2, VAOs);
+	glGenBuffers(2, VBOs);
 
-	glBindVertexArray(VAO);
-
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
+	// setup first triangle
+	glBindVertexArray(VAOs[0]);
+	glBindBuffer(GL_ARRAY_BUFFER, VBOs[0]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(firstTriangle), firstTriangle, GL_STATIC_DRAW);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
+	// glBindVertexArray(0); // 다음 라인에서 다른 버텍스 어레이가 바인딩 되이 때문에 해제할 필요 없음
 
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindVertexArray(0);
+	glBindVertexArray(VAOs[1]);
+	glBindBuffer(GL_ARRAY_BUFFER, VBOs[1]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(secondTriangle), secondTriangle, GL_STATIC_DRAW);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0); // 뺵뺵한 버텍스 데이터이기 때문에 5번째 파마니터에 0을 주어 OpenGL에서 계산하도록 할수도 있음
+	glEnableVertexAttribArray(0);
+
+	// uncomment this call to draw in wireframe polygons.
+	// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	// 렌더링 루프
 	while (!glfwWindowShouldClose(window))
@@ -146,19 +145,21 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		glUseProgram(shaderProgram);
-		glBindVertexArray(VAO);
-		glDrawArrays(GL_TRIANGLES, 0, 9);
+		glBindVertexArray(VAOs[0]);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+
+		glBindVertexArray(VAOs[1]);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
 
 		// 이벤트 확인하고 버퍼 교체
 		glfwPollEvents();
 		glfwSwapBuffers(window);
 	}
 
-	glDeleteVertexArrays(1, &VAO);
-	glDeleteBuffers(1, &VBO);
+	glDeleteVertexArrays(2, VAOs);
+	glDeleteBuffers(2, VBOs);
 	glDeleteProgram(shaderProgram);
 
-	// 윈도우, 콘텍스트 클리어
 	glfwTerminate();
 	return 0;
 }
