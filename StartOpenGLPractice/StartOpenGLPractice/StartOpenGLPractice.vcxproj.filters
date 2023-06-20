@@ -24,7 +24,7 @@
     <ClCompile Include="main.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Practicd02.cpp">
+    <ClCompile Include="Practice03.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

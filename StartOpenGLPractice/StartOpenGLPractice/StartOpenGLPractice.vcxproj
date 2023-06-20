@@ -147,10 +147,10 @@
   <ItemGroup>
     <ClCompile Include="C:\Users\jakei\Downloads\glad (1)\src\glad.c" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Practicd02.cpp" />
     <ClCompile Include="Practice01.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="Practice03.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PracticeFunction.h" />
