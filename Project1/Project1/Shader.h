@@ -1,19 +1,17 @@
+#ifndef SHADER_H
+#define SHADER_H
 #pragma once
-
-#ifndef SHADER
-#define SHADER
 
 #include <string>
 #include <fstream>
 #include <sstream>
 #include <iostream>
 
-
-class Shader
+class ShaderD
 {
 	unsigned int ID;
 
-public: Shader(const char* vertexPath, const char* fragmentPath);
+public: ShaderD(const char* vertexPath, const char* fragmentPath);
 	  void use();
 	  void setBool(const std::string& name, bool value) const;
 	  void setInt(const std::string& name, int value) const;
@@ -22,5 +20,4 @@ public: Shader(const char* vertexPath, const char* fragmentPath);
 private:
 	void checkCompileErrors(unsigned int shader, std::string type);
 };
-
 #endif
