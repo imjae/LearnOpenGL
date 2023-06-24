@@ -19,7 +19,7 @@ const char* fragmentShaderSource =
 "void main()\n"
 "{\n"
 "	FragColor=ourColor;\n"
-"}\0";
+"}\n";
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
