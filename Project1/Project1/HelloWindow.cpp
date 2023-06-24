@@ -5,20 +5,21 @@
 const char* vertexShaderSource =
 "#version 330 core\n"
 "layout (location = 0) in vec3 aPos;\n"
-"out vec4 vertexColor;\n"
+"layout (location = 1) in vec3 aColor;\n"
+"out vec3 ourColor;\n"
 "void main()\n"
 "{\n"
-"   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-"   vertexColor = vec4(0.5, 0.0, 0.0, 1.0);\n"
+"   gl_Position = vec4(aPos, 1.0);\n"
+"   ourColor = aColor;\n"
 "}\0";
 
 const char* fragmentShaderSource = 
 "#version 330 core\n"
 "out vec4 FragColor;\n"
-"uniform vec4 ourColor;\n"
+"in vec3 ourColor;\n"
 "void main()\n"
 "{\n"
-"	FragColor=ourColor;\n"
+"	FragColor=vec4(ourColor, 1.0);\n"
 "}\n";
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
@@ -116,23 +117,16 @@ int main()
 
 	// 사각형에 맞는 버텍스 위치 설정
 	float vertices[] = {
-		0.5f,  0.5f, 0.0f,  // 우측 상단
-		0.5f, -0.5f, 0.0f,  // 우측 하단
-		-0.5f, -0.5f, 0.0f,  // 좌측 하단
-		-0.5f,  0.5f, 0.0f   // 좌측 상단
-	};
-
-	// 위 버텍스 좌표의 인덱스로 삼각형을 구성하도록 데이터 셋팅
-	unsigned int indices[] = {
-		0, 1, 3,
-		1, 2, 3
+		// 위치              // 컬러
+		 0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f,   // 우측 하단
+		-0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,   // 좌측 하단
+		 0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f    // 위 
 	};
 
 	// VAO, VBO, EBO 순서대로 버퍼 생성
-	unsigned int VBO, VAO, EBO;
+	unsigned int VBO, VAO;
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
-	glGenBuffers(1, &EBO);
 
 	// Vertext Array Object 바인딩
 	glBindVertexArray(VAO);
@@ -143,14 +137,12 @@ int main()
 	// GL_STATIC_DRAW는 유니티 오브젝트의 static 옵션 같음
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-	// Element Buffer Object 바인딩
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	// 이전에 바인딩된 버퍼(EBO)에 indices 사이즈와 인덱스 데이터 설정
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
 	// 버텍스 쉐이더에서 설정된 입력 데이터의 location값 (여기서는 0)에 데이터를 어떤식으로 사용할 지 설정
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
+
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3*sizeof(float)));
+	glEnableVertexAttribArray(1);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
@@ -165,15 +157,10 @@ int main()
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		float timeValue = glfwGetTime();
-		float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
-		int vertexColorLocation = glGetUniformLocation(shaderProgram, "ourColor");
-		glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
-
 		glUseProgram(shaderProgram);
 
 		glBindVertexArray(VAO);
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
 
 		// 이벤트 확인하고 버퍼 교체
 		glfwPollEvents();
@@ -181,7 +168,6 @@ int main()
 	}
 
 	glDeleteVertexArrays(1, &VAO);
-	glDeleteBuffers(1, &EBO);
 	glDeleteProgram(shaderProgram);
 
 	// 윈도우, 콘텍스트 클리어
