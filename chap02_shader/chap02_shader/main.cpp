@@ -3,6 +3,8 @@
 
 #include <iostream>
 
+#include "shader.h"
+
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
 
@@ -43,6 +45,8 @@ int main()
         std::cout << "Failed to initialize GLAD" << std::endl;
         return -1;
     }
+
+    shader ourShader = shader("vertexShader.vs", "fragmentShader.fs");
 
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------
@@ -88,7 +92,7 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT);
 
         // render the triangle
-        // ourShader.use();
+        ourShader.use();
         glBindVertexArray(VAO);
         glDrawArrays(GL_TRIANGLES, 0, 3);
 
