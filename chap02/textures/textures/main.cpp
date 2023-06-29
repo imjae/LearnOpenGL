@@ -152,6 +152,7 @@ int main()
     // or set it via the texture class
     // ourShader.setInt("texture2", 1);
 
+    float ratioValue = 0.0;
     // render loop
     // -----------
     while (!glfwWindowShouldClose(window))
@@ -172,6 +173,24 @@ int main()
 
         // render container
         ourShader.use();
+
+        if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_RELEASE)
+        {
+            ratioValue += 0.1;
+            std::cout << "UP : " << ratioValue << std::endl;
+
+            if (ratioValue > 1.0) ratioValue = 1.0;
+        }
+        else if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_RELEASE)
+        {
+            ratioValue -= 0.1;
+            std::cout << "DOWN : " << ratioValue << std::endl;
+
+            if (ratioValue < 0.0) ratioValue = 0.0;
+        }
+        ourShader.setFloat("ratio", ratioValue);
+        
+
         glBindVertexArray(VAO);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
