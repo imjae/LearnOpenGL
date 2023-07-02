@@ -174,33 +174,27 @@ int main()
         glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, texture2);
 
-        // render container
-        ourShader.use();
-
-        if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
-        {
-            ratioValue += 0.1;
-            std::cout << "UP : " << ratioValue << std::endl;
-
-            if (ratioValue > 1.0) ratioValue = 1.0;
-        }
-        else if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
-        {
-            ratioValue -= 0.1;
-            std::cout << "DOWN : " << ratioValue << std::endl;
-
-            if (ratioValue < 0.0) ratioValue = 0.0;
-        }
-        ourShader.setFloat("ratio", ratioValue);
-        
-        glm::mat4 trans(1.0f);
-
-        trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
-        trans = glm::translate(trans, glm::vec3(0.5f, -0.5f, 0.0f));
+        glm::mat4 transform = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
+        // first container
+        // ---------------
+        transform = glm::translate(transform, glm::vec3(0.5f, -0.5f, 0.0f));
+        transform = glm::rotate(transform, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+        // get their uniform location and set matrix (using glm::value_ptr)
         unsigned int transformLoc = glGetUniformLocation(ourShader.ID, "transform");
-        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
+        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
 
+        // with the uniform matrix set, draw the first container
         glBindVertexArray(VAO);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+        // second transformation
+        // ---------------------
+        transform = glm::mat4(1.0f); // reset it to identity matrix
+        transform = glm::translate(transform, glm::vec3(-0.5f, 0.5f, 0.0f));
+        float scaleAmount = static_cast<float>(sin(glfwGetTime()));
+        transform = glm::scale(transform, glm::vec3(scaleAmount, scaleAmount, scaleAmount));
+        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, &transform[0][0]); // this time take the matrix value array's first element as its memory pointer value
+
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
