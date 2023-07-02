@@ -1,5 +1,8 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
@@ -27,6 +30,13 @@ int main()
 #ifdef __APPLE__
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
+
+    // glm Test
+    glm::vec4 vec(1.0f, 0.0f, 0.0f, 1.0f);
+    glm::mat4 trans(1.0f);
+    trans = glm::translate(trans, glm::vec3(1.0f, 1.0f, 0.0f));
+    vec = trans * vec;
+    std::cout << vec.x << vec.y << vec.z << std::endl;
 
     // glfw window creation
     // --------------------
@@ -174,14 +184,14 @@ int main()
         // render container
         ourShader.use();
 
-        if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_RELEASE)
+        if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
         {
             ratioValue += 0.1;
             std::cout << "UP : " << ratioValue << std::endl;
 
             if (ratioValue > 1.0) ratioValue = 1.0;
         }
-        else if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_RELEASE)
+        else if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
         {
             ratioValue -= 0.1;
             std::cout << "DOWN : " << ratioValue << std::endl;
