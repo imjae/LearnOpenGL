@@ -48,9 +48,14 @@ int main()
 
 	float vertices[] =
 	{
-		0.5f, -0.5f, 0.0f,
-		-0.5f, -0.5f, 0.0f,
-		0.0f, 0.5f, 0.0f
+		// 첫 번째 삼각형
+		 0.5f,  0.5f, 0.0f,  // 우측 상단
+		 0.5f, -0.5f, 0.0f,  // 우측 하단
+		-0.5f,  0.5f, 0.0f,  // 좌측 상단 
+		// second triangle
+		 0.5f, -0.5f, 0.0f,  // 우측 하단
+		-0.5f, -0.5f, 0.0f,  // 좌측 하단
+		-0.5f,  0.5f, 0.0f   // 좌측 상단
 	};
 
 	unsigned int VBO;
@@ -110,11 +115,14 @@ int main()
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+		glDrawArrays(GL_TRIANGLES, 0, 6);
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
+
+	glDeleteBuffers(1, &VBO);
+	glDeleteBuffers(1, &VAO);
 
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);
