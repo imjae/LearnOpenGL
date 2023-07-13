@@ -91,15 +91,18 @@ int main()
 
 	// set up vertex data (and buffer(s)) and configure vertex attributes
 	// ------------------------------------------------------------------
-	float vertices[] = {
-	 0.5f,  0.5f, 0.0f,  // 우측 상단
-	 0.5f, -0.5f, 0.0f,  // 우측 하단
-	-0.5f, -0.5f, 0.0f,  // 좌측 하단
-	-0.5f,  0.5f, 0.0f   // 좌측 상단
+	float vertices[] = 
+	{
+		0.0f, 0.5f, 0.0f,		// 최상단 0
+		-0.4f, 0.1f, 0.0f,		// 좌측 상단 1
+		0.4f, 0.1f, 0.0f,		// 우측 상단 2
+		-0.25f, -0.5f, 0.0f,	// 좌측 하단 3
+		0.25f, -0.5f, 0.0f,		// 우측 하단 4
 	};
 	unsigned int indices[] = {  // 0부터 시작한다는 것을 명심하세요!
-		0, 1, 3,   // 첫 번째 삼각형
-		1, 2, 3    // 두 번째 삼각형
+		0, 1, 2,   // 첫 번째 삼각형
+		1, 2, 4,    // 두 번째 삼각형
+		1, 3, 4,    // 세 번째 삼각형
 	};
 
 	unsigned int VBO, VAO, EBO;
@@ -140,7 +143,7 @@ int main()
 		// draw our first triangle
 		glUseProgram(shaderProgram);
 		glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, 9, GL_UNSIGNED_INT, 0);
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
