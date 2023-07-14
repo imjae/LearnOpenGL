@@ -3,18 +3,27 @@
 
 #include <iostream>
 
-#include "Window.h"
+#include "MyWindow.h"
+
+void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+{
+	
+}
 
 int main()
 {
-	Window win = Window("ReviewOpenGL", 800, 600, 3, 3, GLFW_OPENGL_CORE_PROFILE);
-	win.InitializeWindow();
+	MyWindow myWindow = MyWindow("ReviewOpenGL", 800, 600, 3, 3, GLFW_OPENGL_CORE_PROFILE);
+	myWindow.InitializeWindow();
 
-	GLFWwindow* window = win.CreateWindow();
-	if (window == NULL) 
-		return -1;
+	if (myWindow.InitializeGlad() == -1) return -1;
+
+	GLFWwindow* window = myWindow.createWindow();
+	if (window == NULL) return -1;
 
 	glfwMakeContextCurrent(window);
+
+	myWindow.setFramebufferSizeCallback(window);
+
 
 	return 0;
 }
