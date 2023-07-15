@@ -13,14 +13,14 @@ private:
 	int minorVersion;
 	int openglProfile;
 
+	void InitializeWindow();
+	int LoadGlad();
+	void setFramebufferSizeCallback(GLFWwindow* window);
+
 public:
 	MyWindow();
 	MyWindow(const char* title, int width, int height, int majorVersion, int minorVersion, int profile);
-	
-	void InitializeWindow();
-	int LoadGlad();
 
-	void setFramebufferSizeCallback(GLFWwindow* window);
 	void processInput(GLFWwindow* window);
 
 	GLFWwindow* createWindow();

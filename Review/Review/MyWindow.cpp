@@ -17,6 +17,8 @@ MyWindow::MyWindow(const char* title, int width, int height, int majorVersion, i
 	this->majorVersion = majorVersion;
 	this->minorVersion = minorVersion;
 	this->openglProfile = openglProfile;
+
+	InitializeWindow();
 }
 
 void MyWindow::InitializeWindow()
@@ -64,6 +66,13 @@ GLFWwindow* MyWindow::createWindow()
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;
 		glfwTerminate();
+	}
+	else
+	{
+		glfwMakeContextCurrent(window);
+		setFramebufferSizeCallback(window);
+
+		if (LoadGlad() == -1) return NULL;
 	}
 
 	return window;
