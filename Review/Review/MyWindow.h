@@ -18,9 +18,10 @@ public:
 	MyWindow(const char* title, int width, int height, int majorVersion, int minorVersion, int profile);
 	
 	void InitializeWindow();
-	int InitializeGlad();
+	int LoadGlad();
 
 	void setFramebufferSizeCallback(GLFWwindow* window);
+	void processInput(GLFWwindow* window);
 
 	GLFWwindow* createWindow();
 

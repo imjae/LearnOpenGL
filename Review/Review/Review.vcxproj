@@ -150,7 +150,7 @@
     <ClCompile Include="MyWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Window.h" />
+    <ClInclude Include="MyWindow.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+void framebufferSizeCallback(GLFWwindow* window, int width, int height);
+
 MyWindow::MyWindow()
 {
 
@@ -25,7 +27,7 @@ void MyWindow::InitializeWindow()
 	glfwWindowHint(GLFW_OPENGL_PROFILE, openglProfile);
 }
 
-int MyWindow::InitializeGlad()
+int MyWindow::LoadGlad()
 {
 	int result = -1;
 
@@ -45,6 +47,14 @@ int MyWindow::InitializeGlad()
 void MyWindow::setFramebufferSizeCallback(GLFWwindow* window)
 {
 	glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
+}
+
+void MyWindow::processInput(GLFWwindow* window)
+{
+	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+	{
+		glfwSetWindowShouldClose(window, true);
+	}
 }
 
 GLFWwindow* MyWindow::createWindow()
