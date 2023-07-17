@@ -6,20 +6,6 @@
 #include "MyWindow.h"
 #include "MyShader.h"
 
-const char* vertexShaderSource = "#version 330 core\n"
-"layout (location = 0) in vec3 aPos;\n"
-"void main()\n"
-"{\n"
-"   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-"}\n\0";
-
-const char* fragmentShaderSource = "#version 330 core\n"
-"out vec4 FragColor;\n"
-"void main()\n"
-"{\n"
-"   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-"}\n\0";
-
 int main()
 {
 	MyWindow myWindow = MyWindow("ReviewOpenGL", 800, 600, 3, 3, GLFW_OPENGL_CORE_PROFILE);
@@ -28,6 +14,7 @@ int main()
 	if (window == NULL) return -1;
 
 	MyShader shader = MyShader("vertexShader.shader", "fragmentShader.shader");
+	MyShader shader2 = MyShader("vertexShader.shader", "fragmentShader2.shader");
 
 	float vertices1[] = {
 		 -0.25f, 0.5f, 0.0f,
@@ -71,12 +58,12 @@ int main()
 
 		// 렌더링
 		shader.use();
+		glBindVertexArray(VAO[0]);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
 
-		for (int index = 0; index < 2; index++)
-		{
-			glBindVertexArray(VAO[index]);
-			glDrawArrays(GL_TRIANGLES, 0, 3);
-		}
+		shader2.use();
+		glBindVertexArray(VAO[1]);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
 
 		// 이벤트 확인하고 버퍼 교체
 		glfwPollEvents();
