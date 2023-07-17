@@ -35,13 +35,13 @@ int main()
 		  0.0f, -0.5f, 0.0f,
 	};
 	
-	unsigned int VBO, VAO;
-	glGenVertexArrays(1, &VAO);
-	glGenBuffers(1, &VBO);
+	unsigned int VBO[2], VAO[2];
+	glGenVertexArrays(2, VAO);
+	glGenBuffers(2, VBO);
 
-	glBindVertexArray(VAO);
+	glBindVertexArray(VAO[0]);
 
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO[0]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices1), vertices1, GL_STATIC_DRAW);
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
@@ -53,13 +53,9 @@ int main()
 		  0.5f, -0.5f, 0.0f,
 	};
 
-	unsigned int VBO2, VAO2;
-	glGenVertexArrays(1, &VAO2);
-	glGenBuffers(1, &VBO2);
+	glBindVertexArray(VAO[1]);
 
-	glBindVertexArray(VAO2);
-
-	glBindBuffer(GL_ARRAY_BUFFER, VBO2);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO[1]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices2), vertices2, GL_STATIC_DRAW);
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
@@ -75,21 +71,20 @@ int main()
 
 		// 렌더링
 		shader.use();
-		glBindVertexArray(VAO);
-		glDrawArrays(GL_TRIANGLES, 0, 3);
-		glBindVertexArray(VAO2);
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+
+		for (int index = 0; index < 2; index++)
+		{
+			glBindVertexArray(VAO[index]);
+			glDrawArrays(GL_TRIANGLES, 0, 3);
+		}
 
 		// 이벤트 확인하고 버퍼 교체
 		glfwPollEvents();
 		glfwSwapBuffers(window);
 	}
 
-	glDeleteVertexArrays(1, &VAO);
-	glDeleteBuffers(1, &VBO);
-
-	glDeleteVertexArrays(1, &VAO2);
-	glDeleteBuffers(1, &VBO2);
+	glDeleteVertexArrays(2, VAO);
+	glDeleteBuffers(2, VBO);
 
 	glDeleteProgram(shader.ID);
 
