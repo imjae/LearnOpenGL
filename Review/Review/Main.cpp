@@ -4,6 +4,7 @@
 #include <iostream>
 
 #include "MyWindow.h"
+#include "MyShader.h"
 
 const char* vertexShaderSource = "#version 330 core\n"
 "layout (location = 0) in vec3 aPos;\n"
@@ -26,47 +27,7 @@ int main()
 	GLFWwindow* window = myWindow.createWindow();
 	if (window == NULL) return -1;
 
-	unsigned int vertexShader;
-	vertexShader = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-	glCompileShader(vertexShader);
-
-	int success;
-	char infoLog[512];
-	glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-	if (!success)
-	{
-		glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
-	}
-
-	unsigned int fragmentShader;
-	fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-	glCompileShader(fragmentShader);
-
-	glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
-	if (!success)
-	{
-		glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
-	}
-
-	unsigned int shaderProgram;
-	shaderProgram = glCreateProgram();
-	glAttachShader(shaderProgram, vertexShader);
-	glAttachShader(shaderProgram, fragmentShader);
-	glLinkProgram(shaderProgram);
-
-	glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-	if (!success)
-	{
-		glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::PROGRAM::LINK_FAILED\n" << infoLog << std::endl;
-	}
-
-	glDeleteShader(vertexShader);
-	glDeleteShader(fragmentShader);
+	MyShader shader = MyShader("vertexShader.shader", "fragmentShader.shader");
 
 	float vertices[] = {
 		 0.5f,  0.5f, 0.0f,  // top right
@@ -105,7 +66,7 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		// ·»´õ¸µ
-		glUseProgram(shaderProgram);
+		shader.use();
 		glBindVertexArray(VAO);
 		// glDrawArrays(GL_TRIANGLES, 0, 6);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
@@ -118,7 +79,7 @@ int main()
 	glDeleteVertexArrays(1, &VAO);
 	glDeleteBuffers(1, &VBO);
 	glDeleteBuffers(1, &EBO);
-	glDeleteProgram(shaderProgram);
+	glDeleteProgram(shader.ID);
 
 	glfwTerminate();
 
