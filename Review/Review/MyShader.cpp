@@ -78,6 +78,16 @@ void MyShader::setFloat(const std::string& name, float value) const
 {
     glUniform1f(glGetUniformLocation(ID, name.c_str()), value);
 }
+// ------------------------------------------------------------------------
+void MyShader::setUniform3f(const std::string& name, float value1, float value2, float value3) const
+{
+    glUniform3f(glGetUniformLocation(ID, name.c_str()), value1, value2, value3);
+}
+// ------------------------------------------------------------------------
+void MyShader::setUniform4f(const std::string& name, float value1, float value2, float value3, float value4) const
+{
+    glUniform4f(glGetUniformLocation(ID, name.c_str()), value1, value2, value3, value4);
+}
 
 // utility function for checking shader compilation/linking errors.
 // ------------------------------------------------------------------------
