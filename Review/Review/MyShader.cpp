@@ -79,6 +79,11 @@ void MyShader::setFloat(const std::string& name, float value) const
     glUniform1f(glGetUniformLocation(ID, name.c_str()), value);
 }
 // ------------------------------------------------------------------------
+void MyShader::setUniform1ui(const std::string& name, unsigned int value) const
+{
+    glUniform1ui(glGetUniformLocation(ID, name.c_str()), value);
+}
+// ------------------------------------------------------------------------
 void MyShader::setUniform3f(const std::string& name, float value1, float value2, float value3) const
 {
     glUniform3f(glGetUniformLocation(ID, name.c_str()), value1, value2, value3);
