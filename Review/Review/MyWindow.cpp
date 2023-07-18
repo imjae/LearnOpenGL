@@ -6,7 +6,14 @@ void framebufferSizeCallback(GLFWwindow* window, int width, int height);
 
 MyWindow::MyWindow()
 {
+	this->title = "DefaultTitle";
+	this->width = 800;
+	this->height = 600;
+	this->majorVersion = 3;
+	this->minorVersion = 3;
+	this->openglProfile = GLFW_OPENGL_CORE_PROFILE;
 
+	InitializeWindow();
 }
 
 MyWindow::MyWindow(const char* title, int width, int height, int majorVersion, int minorVersion, int openglProfile)
