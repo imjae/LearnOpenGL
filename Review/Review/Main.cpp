@@ -17,9 +17,9 @@ int main()
 	MyShader shader2 = MyShader("vertexShader.shader", "fragmentShader2.shader");
 
 	float vertices1[] = {
-		 -0.25f, 0.5f, 0.0f,
-		 -0.5f, -0.5f, 0.0f,
-		  0.0f, -0.5f, 0.0f,
+		 -0.25f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f,
+		 -0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,
+		  0.0f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f
 	};
 	
 	unsigned int VBO[2], VAO[2];
@@ -31,13 +31,15 @@ int main()
 	glBindBuffer(GL_ARRAY_BUFFER, VBO[0]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices1), vertices1, GL_STATIC_DRAW);
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(sizeof(float) * 3));
+	glEnableVertexAttribArray(1);
 
 	float vertices2[] = {
-		  0.0f, -0.5f, 0.0f,
-		  0.25f, 0.5f, 0.0f,
-		  0.5f, -0.5f, 0.0f,
+		  0.0f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f,
+		  0.25f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f,
+		  0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f
 	};
 
 	glBindVertexArray(VAO[1]);
@@ -45,8 +47,10 @@ int main()
 	glBindBuffer(GL_ARRAY_BUFFER, VBO[1]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices2), vertices2, GL_STATIC_DRAW);
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(sizeof(float)*3));
+	glEnableVertexAttribArray(1);
 
 	while(!glfwWindowShouldClose(window))
 	{
@@ -58,11 +62,6 @@ int main()
 
 		// ·»´õ¸µ
 		shader.use();
-
-		float timeValue = (float)glfwGetTime();
-		float greenValue = sin(timeValue) / 2.0f * 0.5f;
-		shader.setUniform4f("ourColor", 0.0f, greenValue, 0.0f, 1.0f);
-		
 		glBindVertexArray(VAO[0]);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
 
