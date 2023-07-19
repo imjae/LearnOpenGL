@@ -18,45 +18,34 @@ int main()
 	if (window == NULL) return -1;
 
 	MyShader shader = MyShader("vertexShader.shader", "fragmentShader.shader");
-	MyShader shader2 = MyShader("vertexShader.shader", "fragmentShader2.shader");
 
-	float vertices1[] = {
-		 -0.25f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 0.5f, 1.0f,
-		 -0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f,
-		  0.0f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f
-	};
-	
-	unsigned int VBO[2], VAO[2];
-	glGenVertexArrays(2, VAO);
-	glGenBuffers(2, VBO);
-
-	glBindVertexArray(VAO[0]);
-
-	glBindBuffer(GL_ARRAY_BUFFER, VBO[0]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices1), vertices1, GL_STATIC_DRAW);
-
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(sizeof(float) * 3));
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(sizeof(float) * 6));
-	glEnableVertexAttribArray(2);
-
-	float vertices2[] = {
-		  0.0f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f,
-		  0.25f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f,
-		  0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f
+	float vertices[] =
+	{
+		-0.5f, 0.5f, 0.0f,		// 좌측 상단
+		0.5f, 0.5f, 0.0f,		// 우측 상단
+		-0.5f,-0.5f, 0.0f,		// 좌측 하단
+		0.5f, -0.5f, 0.0f		// 우측 하단
 	};
 
-	glBindVertexArray(VAO[1]);
+	int indices[] =
+	{
+		0, 1, 2,
+		1, 2, 3
+	};
 
-	glBindBuffer(GL_ARRAY_BUFFER, VBO[1]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices2), vertices2, GL_STATIC_DRAW);
+	unsigned int VBO, VAO, EBO;
+	glGenVertexArrays(1, &VAO);
+	glGenBuffers(1, &VBO);
+	glGenBuffers(1, &EBO);
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(sizeof(float)*3));
-	glEnableVertexAttribArray(1);
+	glBindVertexArray(VAO);
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vertices), (void*)0);
+
+
 
 	unsigned int texture;
 	glGenTextures(1, &texture);
@@ -83,33 +72,19 @@ int main()
 	//shader.use();
 	//shader.setUniform1ui("ourTexture", texture);
 
-	while(!glfwWindowShouldClose(window))
+	while (!glfwWindowShouldClose(window))
 	{
 		// 입력
-		myWindow.processInput(window);  
+		myWindow.processInput(window);
 
 		glClearColor(.2f, .3f, .3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		//glActiveTexture(GL_TEXTURE0);
-		//glBindTexture(GL_TEXTURE_2D, texture);
-
-		// 렌더링
-		shader.use();
-		glBindVertexArray(VAO[0]);
-		glDrawArrays(GL_TRIANGLES, 0, 3);
-
-		shader2.use();
-		glBindVertexArray(VAO[1]);
-		glDrawArrays(GL_TRIANGLES, 0, 3);
 
 		// 이벤트 확인하고 버퍼 교체
 		glfwPollEvents();
 		glfwSwapBuffers(window);
 	}
-
-	glDeleteVertexArrays(2, VAO);
-	glDeleteBuffers(2, VBO);
 
 	glDeleteProgram(shader.ID);
 
