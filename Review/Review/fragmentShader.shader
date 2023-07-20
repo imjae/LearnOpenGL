@@ -10,5 +10,5 @@ uniform sampler2D smileTexture;
 
 void main()
 {
-	FragColor = mix(texture(containerTexture, TexCoord), texture(smileTexture, TexCoord), .2);
+	FragColor = mix(texture(containerTexture, TexCoord), texture(smileTexture, TexCoord), .2) * ourColor;
 }
