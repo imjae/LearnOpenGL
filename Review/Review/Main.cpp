@@ -21,16 +21,17 @@ int main()
 
 	float vertices[] =
 	{
-		-0.5f, 0.5f, 0.0f,		// 좌측 상단
-		0.5f, 0.5f, 0.0f,		// 우측 상단
-		-0.5f,-0.5f, 0.0f,		// 좌측 하단
-		0.5f, -0.5f, 0.0f		// 우측 하단
+		// 위치              // 컬러             // 텍스처 좌표
+		 0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // 우측 상단
+		 0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // 우측 하단
+		-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // 좌측 하단
+		-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // 좌측 상단
 	};
 
 	int indices[] =
 	{
 		0, 1, 2,
-		1, 2, 3
+		0, 2, 3,
 	};
 
 	unsigned int VBO, VAO, EBO;
@@ -46,8 +47,12 @@ int main()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+	glEnableVertexAttribArray(2);
 
 	unsigned int texture;
 	glGenTextures(1, &texture);
@@ -82,8 +87,12 @@ int main()
 
 		shader.use();
 
+		glBindTexture(GL_TEXTURE_2D, texture);
+
 		glBindVertexArray(VAO);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+
 
 		// 이벤트 확인하고 버퍼 교체
 		glfwPollEvents();
