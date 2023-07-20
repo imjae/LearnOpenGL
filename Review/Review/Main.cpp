@@ -30,8 +30,8 @@ int main()
 
 	int indices[] =
 	{
-		0, 1, 2,
-		0, 2, 3,
+		0, 1, 3, // first triangle
+		1, 2, 3  // second triangle
 	};
 
 	unsigned int VBO, VAO, EBO;
@@ -54,14 +54,16 @@ int main()
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
 	glEnableVertexAttribArray(2);
 
-	unsigned int texture;
-	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture);
+	unsigned int containerTexture;
+	glGenTextures(1, &containerTexture);
+	glBindTexture(GL_TEXTURE_2D, containerTexture);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	stbi_set_flip_vertically_on_load(true); // tell stb_image.h to flip loaded texture's on the y-axis.
 
 	int width, height, nrChannels;
 	unsigned char* data = stbi_load(".\\images\\container.jpg", &width, &height, &nrChannels, 0);
@@ -76,6 +78,30 @@ int main()
 	}
 	stbi_image_free(data);
 
+	unsigned int smileTexture;
+	glGenTextures(1, &smileTexture);
+	glBindTexture(GL_TEXTURE_2D, smileTexture);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	data = stbi_load(".\\images\\smile.png", &width, &height, &nrChannels, 0);
+	if (data)
+	{
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
+	else
+	{
+		std::cout << "Failed to load texture" << std::endl;
+	}
+	stbi_image_free(data);
+
+	shader.use();
+	shader.setInt("containerTexture", 0);
+	shader.setInt("smileTexture", 1);
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -85,19 +111,23 @@ int main()
 		glClearColor(.2f, .3f, .3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, containerTexture);
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, smileTexture);
+
 		shader.use();
-
-		glBindTexture(GL_TEXTURE_2D, texture);
-
 		glBindVertexArray(VAO);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
-
 
 		// 이벤트 확인하고 버퍼 교체
 		glfwPollEvents();
 		glfwSwapBuffers(window);
 	}
+
+	glDeleteBuffers(1, &VBO);
+	glDeleteBuffers(1, &EBO);
+	glDeleteVertexArrays(1, &VAO);
 
 	glDeleteProgram(shader.ID);
 

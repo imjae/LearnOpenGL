@@ -39,6 +39,5 @@
   <ItemGroup>
     <None Include="vertexShader.shader" />
     <None Include="fragmentShader.shader" />
-    <None Include="fragmentShader2.shader" />
   </ItemGroup>
 </Project>
