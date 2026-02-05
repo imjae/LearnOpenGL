@@ -1,2 +1,0 @@
-# LearnOpenGL
-Learn OpenGL
