@@ -45,10 +45,17 @@ int main()
 
 	while (!glfwWindowShouldClose(window))
 	{
+		// 입력 체크
 		processInput(window);
 
-		glfwSwapBuffers(window);
+		// 렌더링 명령어
+		glClearColor(.2f, .3f, .3f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT);
+
+		// 이벤트 확인 및 호출
 		glfwPollEvents();
+		// 버퍼 스왑
+		glfwSwapBuffers(window);
 	}
 
 	glfwTerminate();
