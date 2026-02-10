@@ -1,1 +1,41 @@
-.vs/
+# 빌드 디렉토리 (Debug, Release 등)
+/Debug/
+/Release/
+/x64/
+/x86/
+/build/
+
+# Visual Studio 파일
+*.user
+*.sdf
+*.opensdf
+*.db
+*.suo
+*.sln.ide
+*.vs/
+*.ipch/
+*.tlog
+*.idb
+*.pdb
+
+# CMake 관련 파일
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+cmake_install.cmake
+Makefile
+install_manifest.txt
+*.cbp
+*.make
+
+# 운영체제 생성 파일
+.DS_Store
+Thumbs.db
+
+# 기타 임시 파일
+*.log
+*.obj
+*.o
+*.exe
+*.out
+*.app
