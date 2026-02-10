@@ -1,4 +1,4 @@
-# 빌드 디렉토리 (Debug, Release 등)
+﻿# 빌드 디렉토리 (Debug, Release 등)
 /Debug/
 /Release/
 /x64/
