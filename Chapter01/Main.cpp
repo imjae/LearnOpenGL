@@ -212,6 +212,7 @@ int main()
 
 		glBindVertexArray(0);
 
+		// TODO 버텍스 속성에 더많은 정보 넣기 해야함!!!
 
 		// 버퍼 스왑
 		glfwSwapBuffers(window);
