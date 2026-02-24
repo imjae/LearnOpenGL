@@ -6,29 +6,21 @@
 const char* vertexShaderSource =
 "#version 330 core\n"
 "layout (location = 0) in vec3 aPos;\n"
-"out vec4 vertexColor;\n"
+"layout (location = 1) in vec3 aColor;\n"
+"out vec3 ourColor;\n"
 "void main()\n"
 "{\n"
 "	gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-"	vertexColor = vec4(1.0, 1.0, 1.0, 1.0);\n"
+"	ourColor = aColor;\n"
 "}\0";
 
 const char* fragmentShaderSource =
 "#version 330 core\n"
 "out vec4 FragColor;\n"
-"uniform vec4 ourColor;\n"
+"in vec3 ourColor;\n"
 "void main()\n"
 "{\n"
-"	FragColor = ourColor;\n"
-"}\0";
-
-const char* fragmentShaderSource2 =
-"#version 330 core\n"
-"out vec4 FragColor;\n"
-"in vec4 vertexColor;\n"
-"void main()\n"
-"{\n"
-"	FragColor = vertexColor;\n"
+"	FragColor = vec4(ourColor, 1.0);\n"
 "}\0";
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
@@ -94,17 +86,6 @@ int main()
 		std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
 	}
 
-	unsigned int fragmentShader2;
-	fragmentShader2 = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fragmentShader2, 1, &fragmentShaderSource2, NULL);
-	glCompileShader(fragmentShader2);
-	glGetShaderiv(fragmentShader2, GL_COMPILE_STATUS, &success);
-	if (!success)
-	{
-		glGetShaderInfoLog(fragmentShader2, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
-	}
-
 	unsigned int shaderProgram;
 	shaderProgram = glCreateProgram();
 	glAttachShader(shaderProgram, vertexShader);
@@ -117,39 +98,14 @@ int main()
 		std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
 	}
 
-	unsigned int shaderProgram2;
-	shaderProgram2 = glCreateProgram();
-	glAttachShader(shaderProgram2, vertexShader);
-	glAttachShader(shaderProgram2, fragmentShader2);
-	glLinkProgram(shaderProgram2);
-	glGetProgramiv(shaderProgram2, GL_LINK_STATUS, &success);
-	if (!success)
-	{
-		glGetProgramInfoLog(shaderProgram2, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
-	}
-
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);
-	glDeleteShader(fragmentShader2);
 
 
 	float vertices[] = {
-		0.0f, 0.5f, 0.0f, 
-		0.5f, 0.0f, 0.0f,
-		0.0f, -0.5f, 0.0f
-		/*0.0f, 0.5f, 0.0f,
-		-0.5f, 0.0f, 0.0f,
-		0.0f, -0.5f, 0.0f,*/
-	};
-
-	float vertices2[] = {
-		/*0.0f, 0.5f, 0.0f,
-		0.5f, 0.0f, 0.0f,
-		0.0f, -0.5f, 0.0f*/
-		0.0f, 0.5f, 0.0f,
-		-0.5f, 0.0f, 0.0f,
-		0.0f, -0.5f, 0.0f,
+		0.0f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 
+		0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+		0.0f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f
 	};
 
 	unsigned int indices[] = {
@@ -157,11 +113,9 @@ int main()
 		1,2,3,	// 두 번째 삼각형
 	};
 
-	unsigned int VBO, VAO, VBO2, VAO2, EBO;
+	unsigned int VBO, VAO, EBO;
 	glGenBuffers(1, &VBO);
 	glGenVertexArrays(1, &VAO);
-	glGenBuffers(1, &VBO2);
-	glGenVertexArrays(1, &VAO2);
 	glGenBuffers(1, &EBO);
 
 	// 버텍스 배열 객체를 먼저 바인딩한 다음 버텍스 버퍼를 바인딩하고 설정한 다음 버텍스 속성을 구성함
@@ -169,15 +123,11 @@ int main()
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
-	glBindVertexArray(VAO2);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO2);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices2), vertices2, GL_STATIC_DRAW);
-
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
 
 	/*glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);*/
@@ -204,15 +154,9 @@ int main()
 
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 6);
-
-		glUseProgram(shaderProgram2);
-		glBindVertexArray(VAO2);
-		glDrawArrays(GL_TRIANGLES, 0, 6);
 		//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 		glBindVertexArray(0);
-
-		// TODO 버텍스 속성에 더많은 정보 넣기 해야함!!!
 
 		// 버퍼 스왑
 		glfwSwapBuffers(window);
