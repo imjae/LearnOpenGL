@@ -64,6 +64,12 @@ int main()
 		//1,2,3,	// 두 번째 삼각형
 	};
 
+	float texCoords[] = {
+		0.0f, 0.0f,		// 왼쪽 하단
+		1.0f, 0.0f,		// 오른쪽 하단
+		0.5f, 1.0f		// 상단 중앙 모서리
+	};
+
 	unsigned int VBO, VAO, EBO;
 	glGenBuffers(1, &VBO);
 	glGenVertexArrays(1, &VAO);
