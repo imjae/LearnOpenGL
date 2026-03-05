@@ -29,5 +29,8 @@
     <ClInclude Include="..\..\Includes\shader.h">
       <Filter>리소스 파일</Filter>
     </ClInclude>
+    <ClInclude Include="C:\Users\jakei\Downloads\stb_image.h">
+      <Filter>리소스 파일</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
