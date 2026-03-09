@@ -9,7 +9,7 @@ uniform sampler2D texture2;
 
 void main()
 {
-    vec2 faceDirection = new vec2(TexCoord.x * -1, TexCoord.y);
+    vec2 faceDirection = new vec2(TexCoord.x, TexCoord.y);
 
     FragColor = mix(texture(texture1, TexCoord), texture(texture2, faceDirection), 0.2);
 }
